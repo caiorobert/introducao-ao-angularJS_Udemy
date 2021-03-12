@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html ng-app="meuModulo">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+
+    <title>AngularJS</title>
+  </head>
+  <body ng-controller="indexController">
+    <header>
+      <!-- As duas formas abaixo servem para carregar o conteúdo do Angular para 
+        o HTML, porém a segunda não mostra o {{titulo}} na tela quando está 
+        carregando. -->
+      <!-- <h2>{{titulo}}</h2> -->
+      <h2 ng-bind="titulo" class="container"></h2>
+    </header>
+    <main class="container">
+      <div class="row">
+        <!-- Da forma abaixo o ng-model filtra todas as colunas-->
+        <input type="text" ng-model="busca" placeholder="Busca" />
+        <!-- Para fazer a busca ser apenas por alguma coluna especifica, fazer 
+          conforme linha comentada abaixo, que no model especifica a coluna do 
+          filtro, no caso busca.nome estará filtrando somente o nome -->
+        <!-- <input type="text" ng-model="busca.nome" placeholder="Busca" /> -->
+      </div>
+      <table class="striped highlight centered">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Nota 1</th>
+            <th>Nota 2</th>
+            <th>Nota 3</th>
+            <th>Média</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="aluno in alunos | filter:busca">
+            <td>{{aluno.nome}}</td>
+            <td>{{aluno.email}}</td>
+            <td>{{aluno.nota1}}</td>
+            <td>{{aluno.nota2}}</td>
+            <td>{{aluno.nota3}}</td>
+            <td>{{aluno.media}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="lib/angular/angular.min.js"></script>
+    <script type="text/javascript">
+      angular
+        .module('meuModulo', [])
+        .controller('indexController', function ($scope) {
+          $scope.titulo = 'Sistema com AngularJS';
+          $scope.alunos = [
+            {
+              nome: 'Caio',
+              email: 'caio.robert@live.com',
+              nota1: 90,
+              nota2: 95,
+              nota3: 100,
+            },
+            {
+              nome: 'Layanne',
+              email: 'layanne.santos@outlook.com.br',
+              nota1: 99,
+              nota2: 98,
+              nota3: 100,
+            },
+            {
+              nome: 'Gaby',
+              email: 'gaby.souza@live.com',
+              nota1: 100,
+              nota2: 97,
+              nota3: 89,
+            },
+            {
+              nome: 'Davi',
+              email: 'davi.souza@live.com',
+              nota1: 98,
+              nota2: 100,
+              nota3: 95,
+            },
+            {
+              nome: 'Giovanni',
+              email: 'giovanni.souza@live.com',
+              nota1: 100,
+              nota2: 100,
+              nota3: 100,
+            },
+          ];
+
+          var init = function () {
+            $scope.alunos.forEach(function (aluno) {
+              // criando no objeto aluno, o atributo media
+              aluno.media = media(aluno);
+            });
+          };
+
+          //da forma abaixo, a função é local, pertence somente ao JS
+          var media = function (aluno) {
+            var media = (aluno.nota1 + aluno.nota2 + aluno.nota3) / 3;
+            return media.toFixed(2);
+          };
+
+          // da forma abaixo, a função média ficava acessível no HTML por conta do $scope
+          // $scope.media = function (aluno) {
+          //   var media = (aluno.nota1 + aluno.nota2 + aluno.nota3) / 3;
+          //   return media.toFixed(2);
+          // };
+
+          init();
+        });
+    </script>
+  </body>
+</html>
